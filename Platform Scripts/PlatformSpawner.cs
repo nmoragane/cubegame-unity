@@ -6,7 +6,7 @@ public class PlatformSpawner : MonoBehaviour
 {
     public GameObject platformPrefab;
     public GameObject spikePlatformPrefab;
-    public GameObject movingPlatform;
+    public GameObject[] movingPlatform;
     public GameObject breakablePlatform;
 
     public float platform_Spawn_Timer = 2f;
@@ -16,12 +16,54 @@ public class PlatformSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        current_Platform_Spawn_Timer = platform_Spawn_Timer;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        SpawnPlatforms();
     }
-}
+
+    void SpawnPlatforms () {
+        current_Platform_Spawn_Timer+= Time.deltaTime;
+
+        if(current_Platform_Spawn_Timer >= platform_Spawn_Timer) {
+            platform_Spawn_Count++;
+
+            Vector3 temp = transform.position;
+            temp.x = Random.Range(min_X, max_X);
+
+            GameObject newPlatform = null;
+
+            if (platform_Spawn_Count < 2) {
+                newPlatform = Instantiate(platformPrefab, temp, Quaternion.identity);
+            } else if (platform_Spawn_Count == 2) {
+                if (Random.Range(0,2) > 0) {
+                    newPlatform = Instantiate(platformPrefab, temp, Quaternion.identity);
+                } else {
+                    newPlatform = Instantiate(movingPlatform[Random.Range(0, movingPlatform.Length)],
+                        temp, Quaternion.identity);
+                }
+            } else if (platform_Spawn_Count == 3) {
+                if (Random.Range(0,2) > 0) {
+                    newPlatform = Instantiate(platformPrefab, temp, Quaternion.identity);
+                } else {
+                    newPlatform = Instantiate(spikePlatformPrefab ,temp, Quaternion.identity);
+                }
+            } else if (platform_Spawn_Count == 4) {
+                if (Random.Range(0,2) > 0) {
+                    newPlatform = Instantiate(platformPrefab, temp, Quaternion.identity);
+                } else {
+                    newPlatform = Instantiate(breakablePlatform , temp, Quaternion.identity);
+                }
+                
+                platform_Spawn_Count = 0;
+            }
+
+            newPlatform.transform.parent = transform;  //spawns are spawned as a child of the spawner object
+            current_Platform_Spawn_Timer = 0f;
+
+        } //spawn plaform
+    }
+} // class
