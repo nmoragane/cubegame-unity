@@ -29,8 +29,16 @@ public class PlatformScript : MonoBehaviour
         if (temp.y >= bound_Y) {
             gameObject.SetActive(false);
         }
+    } //move
+
+    void BreakableDeactivate() {
+        Invoke("DeactivateGameObject", 0.3f);
     }
 
+    void DeactivateGameObject() {
+        //SoundManager.instance.IceBreakSound();
+        gameObject.SetActive(false); 
+    }
 
 
 
