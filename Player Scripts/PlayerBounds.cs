@@ -28,9 +28,17 @@ public class PlayerBounds : MonoBehaviour
             if(!out_Of_Bounds) {
                 out_Of_Bounds = true;
 
-                //SoundManeger.instance.DeathSound();
-                //GameManager.instance.RestartGame();
+                SoundManager.instance.DeathSound();
+                GameManager.instance.RestartGame();
             }
+        }
+    }//check bounds
+
+    void OnTriggerEnter2D(Collider2D target) {
+        if(target.tag == "Spikes"){
+            transform.position = new Vector2(1000f,1000f);
+            SoundManager.instance.DeathSound();
+            GameManager.instance.RestartGame();
         }
     }
 } //class
